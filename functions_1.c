@@ -79,7 +79,8 @@ int print_octal(va_list types, char buffer[],
 
 /************** PRINTS UNSIGNED NUMBER IN HEXADECIMAL **************/
 /**
- * print_hexadecimal - a function that prints an unsigned number in hexadecimal notation
+ * print_hexadecimal - a function that prints an unsigned number
+ * in hexadecimal notation
  * @types: list of arguments
  * @buffer: buffer array to handle print
  * @flags:  calculates active flags
