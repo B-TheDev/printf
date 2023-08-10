@@ -3,14 +3,14 @@
 /************************* PRINT CHAR *************************/
 
 /**
- * print_char - a function that prints a char
- * @types: List a of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: Width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
+ * print_char - a funtion that prints a char
+ * @types: list a of arguments
+ * @buffer: buffer array to handle print
+ * @flags:  calculates active flags
+ * @width: width
+ * @precision: precision specification
+ * @size: size specifier
+ * Return: number of chars printed
  */
 int print_char(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
@@ -22,13 +22,13 @@ int print_char(va_list types, char buffer[],
 /************************* PRINT A STRING *************************/
 /**
  * print_string - a function that prints a string
- * @types: List a of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
+ * @types: list a of arguments
+ * @buffer: buffer array to handle print
+ * @flags:  calculates active flags
  * @width: get width.
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
+ * @precision: precision specification
+ * @size: size specifier
+ * Return: number of chars printed
  */
 int print_string(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
@@ -49,7 +49,7 @@ int print_string(va_list types, char buffer[],
 	}
 
 	while (str[length] != '\0')
-		++length;
+		length++;
 
 	if (precision >= 0 && precision < length)
 		length = precision;
@@ -74,16 +74,39 @@ int print_string(va_list types, char buffer[],
 
 	return (write(1, str, length));
 }
+/************************* PRINT PERCENT SIGN *************************/
+/**
+ * print_percent - a function that prints a percent sign
+ * @types: lista of arguments
+ * @buffer: buffer array to handle print
+ * @flags:  calculates active flags
+ * @width: get width.
+ * @precision: precision specification
+ * @size: size specifier
+ * Return: number of chars printed
+ */
+int print_percent(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
+{
+	UNUSED(types);
+	UNUSED(buffer);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
+	return (write(1, "%%", 1));
+}
+
 /************************* PRINT INT *************************/
 /**
- * print_int - a function that prints int
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
+ * print_int - a function that print int
+ * @types: lista of arguments
+ * @buffer: buffer array to handle print
+ * @flags:  calculates active flags
  * @width: get width.
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
+ * @precision: precision specification
+ * @size: size specifier
+ * Return: number of chars printed
  */
 int print_int(va_list types, char buffer[],
 	int flags, int width, int precision, int size)
@@ -113,43 +136,20 @@ int print_int(va_list types, char buffer[],
 		num /= 10;
 	}
 
-	++i;
+	i++;
 
 	return (write_number(is_negative, i, buffer, flags, width, precision, size));
 }
-/************************* PRINT PERCENT SIGN *************************/
-/**
- * print_percent - a function that prints a percent sign
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width.
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
- */
-int print_percent(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	UNUSED(types);
-	UNUSED(buffer);
-	UNUSED(flags);
-	UNUSED(width);
-	UNUSED(precision);
-	UNUSED(size);
-	return (write(1, "%%", 1));
-}
-
 
 /************************* PRINT BINARY *************************/
 /**
- * print_binary - a function that prints an unsigned number
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
+ * print_binary -  a funtion that prints an unsigned number
+ * @types: list of arguments
+ * @buffer: buffer array to handle print
+ * @flags:  calculates active flags
  * @width: get width.
- * @precision: Precision specification
- * @size: Size specifier
+ * @precision: precision specification
+ * @size: size specifier
  * Return: Numbers of char printed.
  */
 int print_binary(va_list types, char buffer[],
@@ -186,352 +186,3 @@ int print_binary(va_list types, char buffer[],
 	}
 	return (count);
 }
-
-/************************* PRINT UNSIGNED NUMBER *************************/
-/**
- * print_unsigned - a function that prints an unsigned number
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed.
- */
-int print_unsigned(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	int i = BUFF_SIZE - 2;
-	unsigned long int num = va_arg(types, unsigned long int);
-
-	num = convert_size_unsgnd(num, size);
-
-	if (num == 0)
-		buffer[i--] = '0';
-
-	buffer[BUFF_SIZE - 1] = '\0';
-
-	while (num > 0)
-	{
-		buffer[i--] = (num % 10) + '0';
-		num /= 10;
-	}
-
-	++i;
-
-	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
-}
-
-/************* PRINT UNSIGNED NUMBER IN OCTAL  ****************/
-/**
- * print_octal - a function that prints an unsigned number in octal notation
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
- */
-int print_octal(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-
-	int i = BUFF_SIZE - 2;
-	unsigned long int num = va_arg(types, unsigned long int);
-	unsigned long int init_num = num;
-
-	UNUSED(width);
-
-	num = convert_size_unsgnd(num, size);
-
-	if (num == 0)
-		buffer[i--] = '0';
-
-	buffer[BUFF_SIZE - 1] = '\0';
-
-	while (num > 0)
-	{
-		buffer[i--] = (num % 8) + '0';
-		num /= 8;
-	}
-
-	if (flags & F_HASH && init_num != 0)
-		buffer[i--] = '0';
-
-	++i;
-
-	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
-}
-
-/************** PRINT UNSIGNED NUMBER IN HEXADECIMAL **************/
-/**
- * print_hexadecimal - a function that prints an unsigned number in hexadecimal notation
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
- */
-int print_hexadecimal(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	return (print_hexa(types, "0123456789abcdef", buffer,
-		flags, 'x', width, precision, size));
-}
-
-/************* PRINT UNSIGNED NUMBER IN UPPER HEXADECIMAL **************/
-/**
- * print_hexa_upper - a function that prints an unsigned number in upper hexadecimal notation
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
- */
-int print_hexa_upper(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	return (print_hexa(types, "0123456789ABCDEF", buffer,
-		flags, 'X', width, precision, size));
-}
-
-/************** PRINT HEXX NUM IN LOWER OR UPPER **************/
-/**
- * print_hexa - a function that prints a hexadecimal number in lower or upper
- * @types: List of arguments
- * @map_to: Array of values to map the number to
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @flag_ch: Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * @size: Size specification
- * Return: Number of chars printed
- */
-int print_hexa(va_list types, char map_to[], char buffer[],
-	int flags, char flag_ch, int width, int precision, int size)
-{
-	int i = BUFF_SIZE - 2;
-	unsigned long int num = va_arg(types, unsigned long int);
-	unsigned long int init_num = num;
-
-	UNUSED(width);
-
-	num = convert_size_unsgnd(num, size);
-
-	if (num == 0)
-		buffer[i--] = '0';
-
-	buffer[BUFF_SIZE - 1] = '\0';
-
-	while (num > 0)
-	{
-		buffer[i--] = map_to[num % 16];
-		num /= 16;
-	}
-
-	if (flags & F_HASH && init_num != 0)
-	{
-		buffer[i--] = flag_ch;
-		buffer[i--] = '0';
-	}
-
-	++i;
-
-	return (write_unsgnd(0, i, buffer, flags, width, precision, size));
-}
-
-
-/****************** PRINT POINTER ******************/
-/**
- * print_pointer - a function that prints the value of a pointer variable
- * @types: List a of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed.
- */
-int print_pointer(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	char extra_c = 0, padd = ' ';
-	int ind = BUFF_SIZE - 2, length = 2, padd_start = 1; /* length=2, for '0x' */
-	unsigned long num_addrs;
-	char map_to[] = "0123456789abcdef";
-	void *addrs = va_arg(types, void *);
-
-	UNUSED(width);
-	UNUSED(size);
-
-	if (addrs == NULL)
-		return (write(1, "(nil)", 5));
-
-	buffer[BUFF_SIZE - 1] = '\0';
-	UNUSED(precision);
-
-	num_addrs = (unsigned long)addrs;
-
-	while (num_addrs > 0)
-	{
-		buffer[ind--] = map_to[num_addrs % 16];
-		num_addrs /= 16;
-		length++;
-	}
-
-	if ((flags & F_ZERO) && !(flags & F_MINUS))
-		padd = '0';
-	if (flags & F_PLUS)
-		extra_c = '+', length++;
-	else if (flags & F_SPACE)
-		extra_c = ' ', length++;
-
-	++ind;
-
-	/*return (write(1, &buffer[i], BUFF_SIZE - i - 1));*/
-	return (write_pointer(buffer, ind, length,
-		width, flags, padd, extra_c, padd_start));
-}
-
-/************************* PRINT NON PRINTABLE *************************/
-/**
- * print_non_printable - a function that prints ascii codes in hexa of non printable chars
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Number of chars printed
- */
-int print_non_printable(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	int i = 0, offset = 0;
-	char *str = va_arg(types, char *);
-
-	UNUSED(flags);
-	UNUSED(width);
-	UNUSED(precision);
-	UNUSED(size);
-
-	if (str == NULL)
-		return (write(1, "(null)", 6));
-
-	while (str[i] != '\0')
-	{
-		if (is_printable(str[i]))
-			buffer[i + offset] = str[i];
-		else
-			offset += append_hexa_code(str[i], buffer, i + offset);
-
-		++i;
-	}
-
-	buffer[i + offset] = '\0';
-
-	return (write(1, buffer, i + offset));
-}
-
-/************************* PRINT REVERSE *************************/
-/**
- * print_reverse - a function that prints a string in reverse.
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Numbers of chars printed
- */
-
-int print_reverse(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	char *str;
-	int i, count = 0;
-
-	UNUSED(buffer);
-	UNUSED(flags);
-	UNUSED(width);
-	UNUSED(size);
-
-	str = va_arg(types, char *);
-
-	if (str == NULL)
-	{
-		UNUSED(precision);
-
-		str = ")Null(";
-	}
-	for (i = 0; str[i]; i++)
-		;
-
-	for (i = i - 1; i >= 0; i--)
-	{
-		char z = str[i];
-
-		write(1, &z, 1);
-		++count;
-	}
-	return (count);
-}
-/************************* PRINT A STRING IN ROT13 *************************/
-/**
- * print_rot13string - a function that prints a string in rot13.
- * @types: List of arguments
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags
- * @width: get width
- * @precision: Precision specification
- * @size: Size specifier
- * Return: Numbers of chars printed
- */
-int print_rot13string(va_list types, char buffer[],
-	int flags, int width, int precision, int size)
-{
-	char x;
-	char *str;
-	unsigned int i, j;
-	int count = 0;
-	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
-
-	str = va_arg(types, char *);
-	UNUSED(buffer);
-	UNUSED(flags);
-	UNUSED(width);
-	UNUSED(precision);
-	UNUSED(size);
-
-	if (str == NULL)
-		str = "(AHYY)";
-	for (i = 0; str[i]; i++)
-	{
-		for (j = 0; in[j]; j++)
-		{
-			if (in[j] == str[i])
-			{
-				x = out[j];
-				write(1, &x, 1);
-				++count;
-				break;
-			}
-		}
-		if (!in[j])
-		{
-			x = str[i];
-			write(1, &x, 1);
-			++count;
-		}
-	}
-	return (count);
-}
-
